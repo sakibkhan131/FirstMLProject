@@ -1,7 +1,10 @@
 import sys
+import os
 import pandas as pd
 from src.exception import CustomException
 from src.utils import load_object
+import warnings
+warnings.filterwarnings('ignore', category=UserWarning)
 
 
 class PredictPipeline:
@@ -16,11 +19,16 @@ class PredictPipeline:
             model=load_object(file_path=model_path)
             preprocessor=load_object(file_path=preprocessor_path)
             print("After Loading")
+            print(f"Features shape: {features.shape}")
+            print(f"Features columns: {features.columns.tolist()}")
             data_scaled=preprocessor.transform(features)
+            print("After Transform")
             preds=model.predict(data_scaled)
+            print(f"Predictions: {preds}")
             return preds
         
         except Exception as e:
+            print(f"ERROR: {str(e)}")
             raise CustomException(e,sys)
 
 
